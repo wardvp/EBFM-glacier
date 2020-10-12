@@ -1,16 +1,18 @@
-function [io,OUTFILE] = func_writetofile(OUTFILE,io,OUT,grid,t,time,C)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Save model output to files
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% WRITE MODEL OUTPUT TO FILES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [io,OUTFILE] = TIME_write_to_file(OUTFILE,io,OUT,grid,t,time,C)
 
-%% Specify variables to be written
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Specify variables to be written
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if t==1
     io.varsout = [];
     io.unitsout = [];
     io.descout = [];
     io.typeout = [];
     if io.out_surface
-        io.varsout{end+1} = 'smb';              io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'sum';      io.descout{end+1} = 'Mass balance';
+        io.varsout{end+1} = 'cmb';              io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'sum';      io.descout{end+1} = 'Climatic mass balance';
         io.varsout{end+1} = 'Tsurf';            io.unitsout{end+1} = 'K';               io.typeout{end+1} = 'mean';     io.descout{end+1} = 'Surface temperature';
         io.varsout{end+1} = 'climT';            io.unitsout{end+1} = 'K';               io.typeout{end+1} = 'mean';     io.descout{end+1} = 'Air temperature';
         io.varsout{end+1} = 'climP';            io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'sum';      io.descout{end+1} = 'Precipitation';
@@ -21,7 +23,7 @@ if t==1
         io.varsout{end+1} = 'climrain';         io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'sum';      io.descout{end+1} = 'Rainfall';
         io.varsout{end+1} = 'climsnow';         io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'sum';      io.descout{end+1} = 'Snowfall';
         io.varsout{end+1} = 'snowmass';         io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'mean';     io.descout{end+1} = 'Snow mass';
-        io.varsout{end+1} = 'mbal';             io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'mean';     io.descout{end+1} = 'Cumulative mass balance';
+        io.varsout{end+1} = 'cmb_cumulative';   io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'mean';     io.descout{end+1} = 'Cumulative mass balance';
         io.varsout{end+1} = 'melt';             io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'sum';      io.descout{end+1} = 'Melt';
         io.varsout{end+1} = 'refr';             io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'sum';      io.descout{end+1} = 'Refreezing';
         io.varsout{end+1} = 'runoff';           io.unitsout{end+1} = 'm w.e.';          io.typeout{end+1} = 'sum';      io.descout{end+1} = 'Runoff';
@@ -46,11 +48,12 @@ if t==1
     end
 end
 
-
-%% Update OUTFILE.TEMP with variables to be stored
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Update OUTFILE.TEMP with variables to be stored
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fn = io.varsout;
 for i=1:numel(fn)
-    temp_long = eval(['OUT.' fn{i}]);
+    temp_long = OUT.(fn{i});
     if t==1
         OUTFILE.TEMP.(fn{i}) = zeros(size(temp_long));
     end
@@ -65,7 +68,9 @@ for i=1:numel(fn)
     end
 end
 
-%% Save output to binary files
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Save output to binary files
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if t==1 
     if ~exist(io.outdir, 'dir')
        mkdir(io.outdir)
@@ -89,7 +94,9 @@ if t==time.tn
     end
 end
 
-%% Save run info to file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Save run info to file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if t==time.tn
     runinfo.grid = grid;
     runinfo.time = time;

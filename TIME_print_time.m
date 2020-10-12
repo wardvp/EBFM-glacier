@@ -1,11 +1,11 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Print simulation year and day number to screen
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SET TIME PARAMETERS & PRINT MODEL TIME TO SCREEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [time] = func_printtime(t,time)
+function [time] = TIME_print_time(t,time)
 
-time.TS = datenum(time.ts);                 
-time.TE = datenum(time.te);                    
+time.TS = datenum(time.ts);
+time.TE = datenum(time.te);
 
 time.TCUR = time.TS+(t-1)*time.dt;
 time.TCUR_DT = datetime(datevec(time.TCUR));

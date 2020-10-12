@@ -1,14 +1,13 @@
-function IN = user_climate_input(IN,io,C,time,grid)
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% USER INPUT: Provide a climate forcing:
-%%%             - IN.T: grid vector containing temperature at current time
-%%%             - IN.P: grid vector containing temperature at current time
-%%%             - IN.C: grid vector containing temperature at current time
-%%%             - IN.RH: grid vector containing temperature at current time
-%%%             - IN.Pres: grid vector containing temperature at current 
-%%%               time
+%%%     - IN.T: grid vector containing temperature at current time
+%%%     - IN.P: grid vector containing temperature at current time
+%%%     - IN.C: grid vector containing temperature at current time
+%%%     - IN.RH: grid vector containing temperature at current time
+%%%     - IN.Pres: grid vector containing temperature at current time
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function IN = TIME_climate_forcing_read_data(IN,io,C,time,grid)
 
 if ~io.example_run
     % SPECIFY USER INPUT HERE!

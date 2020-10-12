@@ -1,11 +1,14 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Load DEM and glacier outline
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% GRID:
+%%% Read surface heights and glacier mask from input file(s)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [grid] = func_init_grid(grid,io)
+function [grid] = INIT_grid(grid,io)
 
-%% Read and process grid information
-input = user_grid_input(io);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Read and process grid information
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+input = INIT_grid_read_data(io);
 
 grid.x = input.x;
 grid.y = input.y;
@@ -43,7 +46,9 @@ grid.z_mask = grid.z(grid.mask==1);
 grid.ind = find(grid.maskfull==1);
 [grid.xind, grid.yind] = find(grid.maskfull==1);
 
-%% Grid slope and aspect
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Grid slope and aspect
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [ASPECT, SLOPE, gradN, gradE] = gradientm(grid.lat,grid.lon,grid.z);
 grid.slope = tan(SLOPE*pi/180);
 grid.slope_x = gradE;
@@ -58,9 +63,11 @@ grid.lat_mask = grid.lat(grid.mask==1);
 grid.lon_mask = grid.lon(grid.mask==1);
 
 grid.slope_beta = atan(grid.slope);
-grid.slope_gamma = atan(-grid.slope_x./grid.slope_y).* (grid.slope_y>=0) ...
-                    + (-pi + atan(-grid.slope_x./grid.slope_y)) .* (grid.slope_y<0 & grid.slope_x>0) ...
-                    + (pi + atan(-grid.slope_x./grid.slope_y)) .* (grid.slope_y<0 & grid.slope_x<0);
+grid.slope_gamma = atan(-grid.slope_x./grid.slope_y).* (grid.slope_y>=0)...
+                    + (-pi + atan(-grid.slope_x./grid.slope_y)) .* ...
+                    (grid.slope_y<0 & grid.slope_x>0) + (pi + ...
+                    atan(-grid.slope_x./grid.slope_y)) .* ...
+                    (grid.slope_y<0 & grid.slope_x<0);
 grid.slope_gamma(grid.slope_x==0 & grid.slope_y<0) = pi;
 grid.slope_gamma(grid.slope_x==0 & grid.slope_y==0) = 0;
 grid.slope_gamma = -grid.slope_gamma; 

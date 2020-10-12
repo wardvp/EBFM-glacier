@@ -1,5 +1,3 @@
-function input = user_grid_input(io)
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% USER INPUT: Provide grid information:
 %%%         - input.x: 2-D array containing UTM easting coordinates (m)
@@ -9,8 +7,10 @@ function input = user_grid_input(io)
 %%%                       1 = glacier)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+function input = INIT_grid_read_data(io)
+
 if io.example_run
-    load('G:\Projects\Project EBFM_GLACIER\Grid\dem_and_mask_fullgrid.mat');
+    load([io.homedir '\Grid\dem_and_mask.mat']);
     input = grid_svalbard;
 else
     % SPECIFY USER INPUT HERE!
