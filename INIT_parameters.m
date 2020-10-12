@@ -37,7 +37,7 @@ io.homedir = 'G:\Projects\Project EBFM_GLACIER';                            % Ho
 io.outdir = [io.homedir '/Output/'];                                        % Output directory
 io.example_run = 1;                                                         % Run example case (no user input required)
 io.readbootfile = 0;                                                        % REBOOT: read initial conditions from file (1=yes, 0=no)
-io.writebootfile = 0;                                                       % REBOOT: write file for rebooting (1=yes, 0=no)  
+io.writebootfile = 1;                                                       % REBOOT: write file for rebooting (1=yes, 0=no)  
 io.bootfilein = 'boot_init.mat';                                            % REBOOT: bootfile to be read  
 io.bootfileout = 'boot_final.mat';                                          % REBOOT: bootfile to be written
 io.out_surface = 1;                                                         % OUTPUT: write surface variables to files (1=yes, 0=no)

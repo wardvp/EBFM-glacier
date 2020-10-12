@@ -3,6 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function FINAL_create_boot_file(OUT,io)
+
 boot = struct;
 boot.subZ = OUT.subZ;
 boot.subW = OUT.subW;
