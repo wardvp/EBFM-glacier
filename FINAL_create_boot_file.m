@@ -21,11 +21,12 @@ boot.ys = OUT.ys;
 boot.timelastsnow = OUT.timelastsnow;
 boot.alb_snow = OUT.alb_snow;
 
-cd(io.rebootdir);
-if (io.writebootfile)
-    save(io.bootfileout,'boot');
+if ~exist(io.rebootdir, 'dir')
+    mkdir(io.rebootdir);
 end
-cd(io.homedir);
+if (io.writebootfile)
+    save([io.rebootdir io.bootfileout],'boot');
+end
 
 end
 

@@ -35,6 +35,7 @@ phys.percolation = 2;                                                       % De
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 io.homedir = 'G:\Projects\Project EBFM_GLACIER';                            % Home directory
 io.outdir = [io.homedir '/Output/'];                                        % Output directory
+io.rebootdir = [io.homedir '/Reboot/'];                                     % Restart file directory
 io.example_run = 1;                                                         % Run example case (no user input required)
 io.readbootfile = 0;                                                        % REBOOT: read initial conditions from file (1=yes, 0=no)
 io.writebootfile = 1;                                                       % REBOOT: write file for rebooting (1=yes, 0=no)  
