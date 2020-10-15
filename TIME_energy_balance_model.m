@@ -15,7 +15,7 @@ function [OUT] = TIME_energy_balance_model(C,OUT,IN,time,grid)
 
 % Compute SWin, SWout, LWin and GHF (not surface temperature dependent)
 OUT         = TIME_flux_insol(grid,time,OUT);
-[SWin,OUT]  = TIME_flux_SWin(C,OUT,IN);
+[SWin,OUT]  = TIME_flux_SWin(C,OUT,IN,grid);
 [SWout,OUT] = TIME_flux_SWout(C,time,OUT,SWin);
 LWin        = TIME_flux_LWin(C,IN);
 
