@@ -10,11 +10,12 @@ clearvars;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Time parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-time.ts = '1-Sep-2015 0:00';                                                % Date start run
-time.te = '1-Sep-2016 0:00';                                                % Date end run
+time.ts = '01-Sep-2015 00:00';                                              % Date and time start run
+time.te = '01-Sep-2016 00:00';                                              % Date and time end run
 time.dt = 0.125;                                                            % Timestep (days)
 time.tn = round((datenum(time.te)- ...                                      % Nr. of time-steps
-    datenum(time.ts))/time.dt)+1;     
+    datenum(time.ts))/time.dt)+1;
+time.dT_UTC = 1;                                                            % time difference relative to UTC (hours)          
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Grid parameters
@@ -28,12 +29,19 @@ grid.split = [15;25;35];                                                    % Ve
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Model physics
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-phys.percolation = 2;                                                       % Deep percolation scheme (1 = bucket, 2 = normal dist., 3 = linear dist., 4 = uniform dist.)
+phys.percolation = 'normal';                                                % Water percolation scheme:
+                                                                            %   - 'bucket': tipping-bucket method (all water added at the surface)
+                                                                            %   - 'normal': normally distributed deep percolation
+                                                                            %   - 'linear': linearly distributed deep percolation
+                                                                            %   - 'uniform': uniformly distributed deep percolation
+phys.snow_compaction = 'firn_only';                                         % Snow and firn compaction scheme:
+                                                                            %   - 'firn_only': apply Ligtenberg et al. (2011) for all snow and firn layers
+                                                                            %   - 'firn+snow': apply Ligtenberg et al. (2011) for firn layers and Kampenhout et al. (2017) for seasonal snow
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Input/output parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-io.homedir = 'G:\Projects\Project EBFM_GLACIER';                            % Home directory
+io.homedir = pwd;                                                           % Home directory
 io.outdir = [io.homedir '/Output/'];                                        % Output directory
 io.rebootdir = [io.homedir '/Reboot/'];                                     % Restart file directory
 io.example_run = 1;                                                         % Run example case (no user input required)
@@ -41,9 +49,7 @@ io.readbootfile = 0;                                                        % RE
 io.writebootfile = 1;                                                       % REBOOT: write file for rebooting (1=yes, 0=no)  
 io.bootfilein = 'boot_init.mat';                                            % REBOOT: bootfile to be read  
 io.bootfileout = 'boot_final.mat';                                          % REBOOT: bootfile to be written
-io.out_surface = 1;                                                         % OUTPUT: write surface variables to files (1=yes, 0=no)
-io.out_subsurface = 1;                                                      % OUTPUT: write subsurface variables to files (1=yes, 0=no)
-io.freqout = 8;                                                             % OUTPUT: frequency of storing output (every n-th time-step)
+io.freqout = 1;                                                             % OUTPUT: frequency of storing output (every n-th time-step)
 
 end
 
