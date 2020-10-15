@@ -30,7 +30,6 @@ C.Rd = 287.0;                                                               % sp
 C.eps = 0.622;                                                              % C.Rd/C.Rv
 C.dTacc = 0.01;                                                             % threshold dT in solving the energy balance equation (K)
 C.Pref = 1015d2;                                                            % reference air pressure (Pa)
-C.lambda = 1.6;                                                             % optical thickness empirical constant
 C.Pr = 5;                                                                   % Prandtl number in SHF/LHF formulation
 C.T0 = 273.15;                                                              % melting temperature ice (K)
 C.g = 9.81;                                                                 % gravitational acceleration (m s-2)
@@ -44,7 +43,7 @@ C.Pthres = 2.5d-8;                                                          % th
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Snow model
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-C.Dfreshsnow = 350.0;                                                       % density of fresh snow (kg m-3)
+C.Dfreshsnow = 350.0;                                                       % density of fresh snow (kg m-3) [only used if seasonal snow model is deactivated]
 C.Dice = 900.0;                                                             % density of ice (kg m-3)
 C.Dfirn = 500.0;                                                            % density of firn (kg m-3)
 C.Dwater = 1000.0;                                                          % density of water (kg m-3)
