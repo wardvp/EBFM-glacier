@@ -4,7 +4,7 @@
 
 function [OUT] = TIME_mass_balance(OUT,IN,C)
 
-% Calculate climatic mass balance
+% Climatic mass balance
 OUT.cmb = IN.snow + IN.rain - OUT.runoff ...
     + OUT.moist_deposition + OUT.moist_condensation ...
     - OUT.moist_sublimation - OUT.moist_evaporation;
