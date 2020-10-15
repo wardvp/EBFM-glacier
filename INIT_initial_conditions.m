@@ -34,14 +34,14 @@ else
     OUT.subZ(1:grid.gpsum,1:grid.nl)              = grid.max_subZ;
     OUT.alb_snow(1:grid.gpsum,1)                  = C.alb_fresh;            % snow albedo
     if grid.doubledepth                                                     % vertical layer depths (m)
-        OUT.subZ(grid.mask_short==1,1:grid.split(1)-1) = grid.max_subZ;
+        OUT.subZ(grid.mask==1,1:grid.split(1)-1) = grid.max_subZ;
         if length(grid.split)>1
             for n=2:length(grid.split)
-                OUT.subZ(grid.mask_short==1,grid.split(n-1): ...
+                OUT.subZ(grid.mask==1,grid.split(n-1): ...
                     grid.split(n)-1) = (2.0^(n-1))*grid.max_subZ;
             end
         end
-        OUT.subZ(grid.mask_short==1,grid.split(end):grid.nl) = ...
+        OUT.subZ(grid.mask==1,grid.split(end):grid.nl) = ...
             (2.0^length(grid.split))*grid.max_subZ;
     end
     
