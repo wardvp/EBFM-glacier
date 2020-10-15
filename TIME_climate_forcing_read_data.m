@@ -1,10 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% USER INPUT: Provide a climate forcing:
 %%%     - IN.T: grid vector containing temperature at current time
-%%%     - IN.P: grid vector containing temperature at current time
-%%%     - IN.C: grid vector containing temperature at current time
-%%%     - IN.RH: grid vector containing temperature at current time
-%%%     - IN.Pres: grid vector containing temperature at current time
+%%%     - IN.P: grid vector containing precipitation at current time
+%%%     - IN.C: grid vector containing cloud cover at current time
+%%%     - IN.RH: grid vector containing relative humidity at current time
+%%%     - IN.WS: grid vector containing wind speed at current time
+%%%     - IN.Pres: grid vector containing pressure at current time
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function IN = TIME_climate_forcing_read_data(IN,io,C,time,grid)
@@ -13,14 +14,14 @@ if ~io.example_run
     % SPECIFY USER INPUT HERE!
 
 else
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % EXAMPLE: Random weather conditions
     % - sinuisoidal seasonal temperature cycle (no diurnal cycle)
     % - one precipitation event per week
-    % - alternating weeks with high and low cloud fraction and humidity
+    % - alternating weeks with high and low cloud fraction and rel humidity
     % - random with speed between 0 and 10 m s-1
     % - fixed sea level pressure with elevation decline
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Air temperature (K)
     yearfrac = day(time.TCUR_DT,'dayofyear')/C.yeardays;
