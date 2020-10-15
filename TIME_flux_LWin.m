@@ -5,13 +5,13 @@
 function [LWin] = TIME_flux_LWin(C,IN)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Atmospheric emissivity
+%%% Atmospheric emissivity [SOURCE: Konzelmann et al. (1994)]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Clear-sky emissivity
-ecs = 0.23 + C.b.*(IN.VP./IN.T).^0.125;
+ecs = 0.23 + C.b.*(IN.VP./IN.T).^0.125;                                    
 
 % Sky emissivity
-e = ecs.*(1.0-IN.C.^C.p) + C.ecl.*IN.C.^C.p;
+e = ecs.*(1.0-IN.C.^C.p) + C.ecl.*IN.C.^C.p;                                
 		
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Incoming longwave radiation

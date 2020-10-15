@@ -5,7 +5,8 @@
 function [SWout,OUT] = TIME_flux_SWout(C,time,OUT,SWin)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Albedo
+%%% Albedo [SOURCE: Oerlemans and Knap (1998), Bougamont et al. (2005), 
+%%%         Van Pelt et al. (2019)]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ice_cond = OUT.subD(:,1)==C.Dice | OUT.snowmass==0;
 snow_cond = OUT.subD(:,1)<C.Dice & OUT.snowmass>0;
