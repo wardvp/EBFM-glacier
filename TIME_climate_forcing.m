@@ -49,7 +49,7 @@ end
 
 % Potential temperature & lapse rate
 IN.Theta = IN.T.*(C.Pref./IN.Pres).^(C.Rd/C.Cp);
-IN.f_Pottemp = fit(grid.z_mask,IN.Theta,'poly1');
+IN.f_Pottemp = fit(grid.z,IN.Theta,'poly1');
 IN.Theta_lapse = max(IN.f_Pottemp.p1,0.0015);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
