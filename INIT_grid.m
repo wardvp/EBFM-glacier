@@ -10,57 +10,56 @@ function [grid] = INIT_grid(grid,io)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 input = INIT_grid_read_data(io);
 
-grid.x = input.x;
-grid.y = input.y;
-grid.z = input.z;
+grid.x_2D = input.x;
+grid.y_2D = input.y;
+grid.z_2D = input.z;
 
-grid.Lx = size(grid.x,1);
-grid.Ly = size(grid.x,2);
+grid.Lx = size(grid.x_2D,1);
+grid.Ly = size(grid.y_2D,2);
 
-grid.maskfull = input.mask;
+grid.mask_2D = input.mask;
 
-[~,FY] = gradient(grid.y);
+[~,FY] = gradient(grid.y_2D);
 if FY(1)<0
-    grid.x = flipud(grid.x);
-    grid.y = flipud(grid.y);    
-    grid.z = flipud(grid.z);
-    grid.maskfull = flipud(grid.maskfull);
+    grid.x_2D = flipud(grid.x_2D);
+    grid.y_2D = flipud(grid.y_2D);    
+    grid.z_2D = flipud(grid.z_2D);
+    grid.mask_2D = flipud(grid.mask_2D);
 end
-[FX,~] = gradient(grid.x);
+[FX,~] = gradient(grid.x_2D);
 if FX(1)<0
-    grid.x = fliplr(grid.x);
-    grid.y = fliplr(grid.y);    
-    grid.z = fliplr(grid.z);
-    grid.maskfull = fliplr(grid.maskfull);
+    grid.x_2D = fliplr(grid.x_2D);
+    grid.y_2D = fliplr(grid.y_2D);    
+    grid.z_2D = fliplr(grid.z_2D);
+    grid.mask_2D = fliplr(grid.mask_2D);
 end
 
-grid.mask = grid.maskfull(:);
-grid.gpsum = sum(grid.mask==1);
-grid.mask_short = grid.mask(grid.mask==1);
+grid.gpsum = sum(grid.mask_2D(:)==1);
+grid.mask = grid.mask_2D(grid.mask_2D(:)==1);
 
-[grid.lat,grid.lon] = utm2ll(grid.x,grid.y,grid.utmzone);
+[grid.lat_2D,grid.lon_2D] = utm2ll(grid.x_2D,grid.y_2D,grid.utmzone);
 
-grid.x_mask = grid.x(grid.mask==1); 
-grid.y_mask = grid.y(grid.mask==1);
-grid.z_mask = grid.z(grid.mask==1);
-grid.ind = find(grid.maskfull==1);
-[grid.xind, grid.yind] = find(grid.maskfull==1);
+grid.x = grid.x_2D(grid.mask_2D(:)==1); 
+grid.y = grid.y_2D(grid.mask_2D(:)==1);
+grid.z = grid.z_2D(grid.mask_2D(:)==1);
+grid.ind = find(grid.mask_2D==1);
+[grid.xind, grid.yind] = find(grid.mask_2D==1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Grid slope and aspect
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[ASPECT, SLOPE, gradN, gradE] = gradientm(grid.lat,grid.lon,grid.z);
+[ASPECT, SLOPE, gradN, gradE] = gradientm(grid.lat_2D,grid.lon_2D,grid.z_2D);
 grid.slope = tan(SLOPE*pi/180);
 grid.slope_x = gradE;
 grid.slope_y = gradN;
 grid.aspect = ASPECT;
 
-grid.slope = grid.slope(grid.mask==1);
-grid.slope_x = grid.slope_x(grid.mask==1);
-grid.slope_y = grid.slope_y(grid.mask==1);
-grid.aspect = grid.aspect(grid.mask==1);
-grid.lat_mask = grid.lat(grid.mask==1);
-grid.lon_mask = grid.lon(grid.mask==1);
+grid.slope = grid.slope(grid.mask_2D(:)==1);
+grid.slope_x = grid.slope_x(grid.mask_2D(:)==1);
+grid.slope_y = grid.slope_y(grid.mask_2D(:)==1);
+grid.aspect = grid.aspect(grid.mask_2D(:)==1);
+grid.lat = grid.lat_2D(grid.mask_2D(:)==1);
+grid.lon = grid.lon_2D(grid.mask_2D(:)==1);
 
 grid.slope_beta = atan(grid.slope);
 grid.slope_gamma = atan(-grid.slope_x./grid.slope_y).* (grid.slope_y>=0)...
