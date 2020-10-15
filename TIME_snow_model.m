@@ -15,14 +15,18 @@ function [OUT] = TIME_snow_model(C,OUT,IN,dt,grid,phys)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SNOWFALL AND DEPOSITION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Fresh snow density 
-OUT.Dfreshsnow_T(IN.T>C.T0+2) = 50+1.7*17^(3/2);
-OUT.Dfreshsnow_T(IN.T<=C.T0+2 & IN.T>C.T0-15) = 50+1.7.*(IN.T(...
-    IN.T<=C.T0+2 & IN.T>C.T0-15)-C.T0+15).^(3/2);
-OUT.Dfreshsnow_T(IN.T<=C.T0-15) = -3.8328*(IN.T(IN.T<=C.T0-15)-C.T0)-...
-    0.0333*(IN.T(IN.T<=C.T0-15)-C.T0).^2;
-OUT.Dfreshsnow_W = 266.86.*(0.5.*(1+tanh(IN.WS./5))).^8.8;
-OUT.Dfreshsnow = OUT.Dfreshsnow_T(:) + OUT.Dfreshsnow_W(:);
+% Fresh snow density [SOURCE: Kampenhout et al. (2017)]
+if strcmp(phys.snow_compaction,'firn+snow')
+    OUT.Dfreshsnow_T(IN.T>C.T0+2) = 50+1.7*17^(3/2);
+    OUT.Dfreshsnow_T(IN.T<=C.T0+2 & IN.T>C.T0-15) = 50+1.7.*(IN.T(...
+        IN.T<=C.T0+2 & IN.T>C.T0-15)-C.T0+15).^(3/2);
+    OUT.Dfreshsnow_T(IN.T<=C.T0-15) = -3.8328*(IN.T(IN.T<=C.T0-15)-C.T0)-...
+        0.0333*(IN.T(IN.T<=C.T0-15)-C.T0).^2;
+    OUT.Dfreshsnow_W = 266.86.*(0.5.*(1+tanh(IN.WS./5))).^8.8;
+    OUT.Dfreshsnow = OUT.Dfreshsnow_T(:) + OUT.Dfreshsnow_W(:);
+else
+    OUT.Dfreshsnow(:) = C.Dfreshsnow;
+end
 
 % Update layer depths & properties
 shift_snowfall = IN.snow.*C.Dwater./OUT.Dfreshsnow;
@@ -147,8 +151,14 @@ subD_old = OUT.subD;
 subZ_old = OUT.subZ;
 mliqmax = zeros(grid.gpsum,nl);
 
-% Densification of firn [Ligtenberg et al. 2011]
-cond = OUT.subD>=C.Dfirn;
+% Densification of firn [SOURCE: Ligtenberg et al. (2011)]
+if strcmp(phys.snow_compaction,'firn_only')
+    cond = true(grid.gpsum,nl);
+elseif strcmp(phys.snow_compaction,'firn+snow')
+    cond = OUT.subD>=C.Dfirn;
+else
+    error('phys.snow_compaction not set correctly!');
+end
 
 OUT.subTmean = OUT.subTmean .* (1-dt./C.yeardays) + OUT.subT .* dt./...
     C.yeardays;
@@ -167,10 +177,16 @@ OUT.Dens_firn(cond) = dt./C.yeardays.*grav_const(cond).*IN.yearsnow(...
     cond).*C.g.*(C.Dice-OUT.subD(cond)).*exp(-C.Ec./(C.rd.*OUT.subT(...
     cond)) + C.Eg./(C.rd.*OUT.subTmean(cond)));
      
-% Densification of seasonal snow [Kampenhout et al. 2017]
-cond = OUT.subD<C.Dfirn;
+% Densification of seasonal snow [SOURCE: Kampenhout et al. (2017)]
+if strcmp(phys.snow_compaction,'firn_only')
+    cond = false(grid.gpsum,nl);
+elseif strcmp(phys.snow_compaction,'firn+snow')
+    cond = OUT.subD<C.Dfirn;
+else
+    error('phys.snow_compaction not set correctly!');
+end
 
-CC_tap = 200;
+CC_tap = 175;
 CC1 = zeros(grid.gpsum,nl);
 CC2 = zeros(grid.gpsum,nl);
 CC1(OUT.subD<CC_tap) = 1;
@@ -180,12 +196,12 @@ CC2(OUT.subW~=0) = 2;
 CC3 = 2.777d-6;
 CC4 = 0.04;
 
-OUT.subD(cond) = OUT.subD(cond) + dt*3600*24.*OUT.subD(cond).*CC3.* ...
+OUT.subD(cond) = OUT.subD(cond) + dt*C.dayseconds.*OUT.subD(cond).*CC3.* ...
     CC2(cond).*CC1(cond).*exp(-CC4.*(C.T0-OUT.subT(cond)));
 OUT.subD(cond) = min(OUT.subD(cond),C.Dice);
 
 OUT.Dens_destr_metam = zeros(grid.gpsum,nl);   
-OUT.Dens_destr_metam(cond) = dt*3600*24.*OUT.subD(cond).*CC3.*CC2(cond)...
+OUT.Dens_destr_metam(cond) = dt*C.dayseconds.*OUT.subD(cond).*CC3.*CC2(cond)...
     .*CC1(cond).*exp(-CC4.*(C.T0-OUT.subT(cond)));
 
 CC5 = 0.1;
@@ -199,12 +215,12 @@ Psload(cond) = temp(cond);
 Visc(cond) = CC7(cond).*exp(CC5.*(C.T0-OUT.subT(cond))+CC6.*...
     OUT.subD(cond));
 
-OUT.subD(cond) = OUT.subD(cond) + dt*3600*24.*OUT.subD(cond).*...
+OUT.subD(cond) = OUT.subD(cond) + dt*C.dayseconds.*OUT.subD(cond).*...
     Psload(cond)./Visc(cond);
 OUT.subD(cond) = min(OUT.subD(cond),C.Dice);
 
 OUT.Dens_overb_pres = zeros(grid.gpsum,nl); 
-OUT.Dens_overb_pres(cond) = dt*3600*24.*OUT.subD(cond).*Psload(cond)...
+OUT.Dens_overb_pres(cond) = dt*C.dayseconds.*OUT.subD(cond).*Psload(cond)...
     ./Visc(cond);
 
 MO = -0.069+0.66.*(1.25-0.0042.*(max(OUT.subD,50)-50));
@@ -221,7 +237,7 @@ OUT.subD(cond & cond_SD) = OUT.subD(cond & cond_SD) + dt*3600*24.*max(...
 OUT.subD(cond & cond_SD) = min(OUT.subD(cond & cond_SD),C.Dice);
 
 OUT.Dens_drift = zeros(grid.gpsum,nl); 
-OUT.Dens_drift(cond & cond_SD) = dt*3600*24.*max(350-OUT.subD(cond & ...
+OUT.Dens_drift(cond & cond_SD) = dt*C.dayseconds.*max(350-OUT.subD(cond & ...
     cond_SD),0)./tau_i(cond & cond_SD);
 
 % Update layer depths & properties
@@ -229,7 +245,7 @@ cond = OUT.subD<C.Dice;
 
 OUT.subZ(cond) = subZ_old(cond).*subD_old(cond)./OUT.subD(cond);
 
-mliqmax(cond) =  OUT.subD(cond).*OUT.subZ(cond).*0.0143.*exp(3.3.*(...
+mliqmax(cond) =  OUT.subD(cond).*OUT.subZ(cond).*0.0143.*exp(3.3.*(...      % SOURCE: Schneider and Jansson (2004)
     C.Dice-OUT.subD(cond))./C.Dice)./(1-0.0143.*exp(3.3.*(C.Dice-...
     OUT.subD(cond))./C.Dice))...
     .*0.05.*min(C.Dice-OUT.subD(cond),20);
@@ -245,20 +261,24 @@ runoff_irr = OUT.sumWinit - sum(OUT.subW,2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dz1 = ((OUT.subZ(:,1)+0.5.*OUT.subZ(:,2)).^2);
 dz2 = (0.5.*(OUT.subZ(:,3:nl)+OUT.subZ(:,2:nl-1)).^2);
-
 kk = zeros(grid.gpsum,nl);
 c_eff = zeros(grid.gpsum,nl);
 kdTdz = zeros(grid.gpsum,nl);
 
-kk = 0.138-1.01d-3.*OUT.subD+3.233d-6.*OUT.subD.^2;
-c_eff = OUT.subD .* (152.2+7.122.*OUT.subT); 
+% effective conductivity
+kk = 0.138-1.01d-3.*OUT.subD+3.233d-6.*OUT.subD.^2;                         % SOURCE: Sturm et al. (1997)
+ 
+% specific heat capacity
+c_eff = OUT.subD .* (152.2+7.122.*OUT.subT);                                % SOURCE: Yen (1981)                              
     
+% adaptive time-stepping to assure stability (CFL condition)
 z_temp = OUT.subZ(:,2:end);
 c_eff_temp = c_eff(:,1:end);
 kk_temp = kk(:,1:end);
 dt_stab = 0.5*min(c_eff_temp,[],2).*min(z_temp,[],2).^2./max(...
-    kk_temp,[],2)/3600.0/24.0;
+    kk_temp,[],2)/C.dayseconds;
 
+% update temperatures after heat conduction / diffusion
 tt = zeros(grid.gpsum,1);
 while any(tt<dt)
     subT_old = OUT.subT;
@@ -269,28 +289,28 @@ while any(tt<dt)
     
     cond_dt = dt_temp>0;
     
-    kdTdz(cond_dt,2) = (kk(cond_dt,1).*OUT.subZ(cond_dt,1)+0.5.*kk(...
+    kdTdz(cond_dt,2) = (kk(cond_dt,1).*OUT.subZ(cond_dt,1)+0.5.*kk(...      % subsurface heat flux (at upper boundary of layer 2)
         cond_dt,2).*OUT.subZ(cond_dt,2)).*(subT_old(cond_dt,2)-...
         OUT.Tsurf(cond_dt,1)) ./ dz1(cond_dt,1);
-    kdTdz(cond_dt,3:nl) = (kk(cond_dt,2:nl-1).*OUT.subZ(cond_dt,2:nl-1)+...
+    kdTdz(cond_dt,3:nl) = (kk(cond_dt,2:nl-1).*OUT.subZ(cond_dt,2:nl-1)+... % subsurface heat flux (at upper boundary of layer 3 ... nl) 
         kk(cond_dt,3:nl).*OUT.subZ(cond_dt,3:nl)).*(subT_old(...
         cond_dt,3:nl)-subT_old(cond_dt,2:nl-1)) ./ dz2(cond_dt,:);
 
-    OUT.subT(cond_dt,2) = subT_old(cond_dt,2) + 24.*3600.*dt_temp(...
+    OUT.subT(cond_dt,2) = subT_old(cond_dt,2) + C.dayseconds.*dt_temp(...   % temperature 2nd layer 
         cond_dt,1).*(kdTdz(cond_dt,3)-kdTdz(cond_dt,2))./(c_eff(...
         cond_dt,2).*(0.5*OUT.subZ(cond_dt,1)+0.5*OUT.subZ(cond_dt,2)+...
         0.25*OUT.subZ(cond_dt,3)));
-    OUT.subT(cond_dt,3:nl-1) = subT_old(cond_dt,3:nl-1) + 24.*3600.*...
+    OUT.subT(cond_dt,3:nl-1) = subT_old(cond_dt,3:nl-1) + C.dayseconds.*... % temperature layer 3 ... nl-1
         dt_temp(cond_dt,1).*(kdTdz(cond_dt,4:nl)-kdTdz(cond_dt,3:nl-1))...
         ./(c_eff(cond_dt,3:nl-1).*(0.25*OUT.subZ(cond_dt,2:nl-2)+0.5*...
         OUT.subZ(cond_dt,3:nl-1)+0.25*OUT.subZ(cond_dt,4:nl)));
                     
-    OUT.subT(cond_dt,nl) = subT_old(cond_dt,nl) + 24.*3600.*dt_temp(...
+    OUT.subT(cond_dt,nl) = subT_old(cond_dt,nl) + C.dayseconds.*dt_temp(... % temperature bottom layer
         cond_dt,1).*(C.geothermal_flux-kdTdz(cond_dt,nl))./(c_eff(...
         cond_dt,nl).*(0.25*OUT.subZ(cond_dt,nl-1)+0.75*OUT.subZ(...
         cond_dt,nl)));
 end
-OUT.subT(:,1) = OUT.Tsurf(:,1) + (OUT.subT(:,2)-OUT.Tsurf(:,1))./...
+OUT.subT(:,1) = OUT.Tsurf(:,1) + (OUT.subT(:,2)-OUT.Tsurf(:,1))./...        % temperature first layer
     (OUT.subZ(:,1)+0.5*OUT.subZ(:,2)).*0.5.*OUT.subZ(:,1);
 OUT.subT(OUT.subT>C.T0) = C.T0;
 OUT.subCeff = c_eff;
@@ -330,19 +350,20 @@ avail_W_loc = zeros(grid.gpsum,1);
 
 % Water percolation
 z0 = C.perc_depth;
-percolation = phys.percolation;
 zz = cumsum(OUT.subZ,2)-0.5*OUT.subZ;
 carrot = zeros(grid.gpsum,nl);      
-if  percolation == 1                                                        % all water added at surface
+if  strcmp(phys.percolation,'bucket')                                       % all water added at surface
     carrot(:,1) = 1;
-elseif   percolation == 2                                                   % normal percolation distribution
+elseif   strcmp(phys.percolation,'normal')                                  % normal percolation distribution
     carrot = 2*exp( - zz.^2/2/(z0/3)^2 )/(z0/3)/sqrt(2*pi);
-elseif   percolation == 3                                                   % linear percolation distribution
+elseif   strcmp(phys.percolation,'linear')                                  % linear percolation distribution
     carrot = 2*(z0 - zz) / z0.^2;
     carrot = max(carrot,0);                                               
-elseif   percolation == 4                                                   % uniform percolation distribution
+elseif   strcmp(phys.percolation,'uniform')                                 % uniform percolation distribution
     [~, ind] = min(abs(zz - z0));
     carrot(1:ind) = 1/z0; clear ind
+else
+    error('phys.percolation is not set correctly!');
 end
 carrot = carrot.*OUT.subZ;
 carrot = carrot./sum(carrot,2);
@@ -379,10 +400,10 @@ total_slushspace = sum(slushspace,2);
 
 % Calculate surface runoff
 avail_W = avail_W + sum(OUT.subS,2);
-runoff_surface = avail_W - total_slushspace;                                % runoff of excess water at surface
+runoff_surface = max(avail_W - total_slushspace,0);                         % runoff of excess water at surface
 
 % Update slush water content after new water input and runoff
-avail_S = (min(avail_W,total_slushspace));
+avail_S = min(avail_W,total_slushspace);
 runoff_slush = avail_S - 1.0/(1.0+dt/C.Trunoff).*avail_S;                   % runoff of slush water
 avail_S = 1.0/(1.0+dt/C.Trunoff).*avail_S;
 avail_S(avail_S<1d-25) = 0.0;
@@ -465,7 +486,7 @@ if grid.doubledepth
         % Merge layers (accumulation case)
         split = grid.split(n);
         cond = OUT.subZ(:,split)<=(2.0^(n-1))*grid.max_subZ & ...
-            grid.mask_short==1;
+            grid.mask==1;
         subT_old = OUT.subT;
         subD_old = OUT.subD;
         subW_old = OUT.subW;
@@ -498,7 +519,7 @@ if grid.doubledepth
         
         % Split layers (ablation case)
         cond = OUT.subZ(:,split-2)>(2.0^(n-1))*grid.max_subZ & ...
-            grid.mask_short==1;
+            grid.mask==1;
         subT_old = OUT.subT;
         subD_old = OUT.subD;
         subW_old = OUT.subW;
