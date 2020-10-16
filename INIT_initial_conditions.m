@@ -33,6 +33,7 @@ else
     OUT.ys(1:grid.gpsum,1)                        = 500.0;                  % annual snow fall (mm w.e.)
     OUT.subZ(1:grid.gpsum,1:grid.nl)              = grid.max_subZ;
     OUT.alb_snow(1:grid.gpsum,1)                  = C.alb_fresh;            % snow albedo
+    OUT.snowmass(1:grid.gpsum,1)                  = 0.0;                    % snow mass (m w.e.)
     if grid.doubledepth                                                     % vertical layer depths (m)
         OUT.subZ(grid.mask==1,1:grid.split(1)-1) = grid.max_subZ;
         if length(grid.split)>1
@@ -49,7 +50,6 @@ end
 
 % Declare non-initialized variables
 OUT.cmb_cumulative(1:grid.gpsum,1)                  = 0.0;                  % cumulative climatic mass balance (m w.e.)
-OUT.snowmass(1:grid.gpsum,1)                        = 0.0;                  % cumulative snow mass balance (m w.e.)
 OUT.cmb(1:grid.gpsum,1)                             = 0.0;                  % climatic mass balance (m w.e.)
 OUT.subK(1:grid.gpsum,1:grid.nl)                    = 0.0;                  % vertical conductivity (m2 s-1)
 OUT.subCeff(1:grid.gpsum,1:grid.nl)                 = 0.0;                  % vertical effective heat capacity (J m-3 K)
