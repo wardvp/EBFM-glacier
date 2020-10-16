@@ -10,12 +10,11 @@ clearvars;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 outdir = '..\Output\';                  % output directory
 coords = [529490 8629290];              % location (UTM)
-timeseries_start = '1-Jan-2016 00:00';  % start date
-timeseries_end = '1-Sep-2016 00:00';    % start time
-var = 'LWout';                          % plot variable (choose from list 
+timeseries_start = '01-Sep-2015 00:00'; % start date
+timeseries_end = '01-Sep-2016 00:00';   % start time
+var = 'SWin';                           % plot variable (choose from list 
                                         % 	in io.varsout)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 load([outdir '\runinfo.mat']);
 

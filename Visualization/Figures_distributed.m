@@ -9,8 +9,8 @@ clearvars;
 %%% USER SPECIFICATIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 outdir = '..\Output\';                      % output directory
-timedist_start = '1-Sep-2015 0:00';         % start date
-timedist_end = '1-Sep-2016 0:00';           % start time
+timedist_start = '01-Sep-2015 0:00';        % start date
+timedist_end = '01-Sep-2016 0:00';          % start time
 var = 'cmb_cumulative';                     % plot variable (choose from 
                                             %   list in io.varsout)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

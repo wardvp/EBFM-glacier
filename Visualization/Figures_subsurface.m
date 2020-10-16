@@ -10,8 +10,8 @@ clearvars;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 outdir = '..\Output\';              % output directory
 coords = [529490 8629290];          % location (UTM)
-tsub_start = '1-Jun-2016 0:00';     % start date
-tsub_end = '1-Aug-2016 0:00';       % end date
+tsub_start = '01-May-2016 0:00';    % start date
+tsub_end = '01-Jun-2016 0:00';      % end date
 max_depth = 2;                      % maximum subsurface depth in plot (at 
                                     %   starting time)
 vars = {'subD';'subT';'subW'};      % variables to plot (choose from 'subT'
@@ -68,7 +68,7 @@ Depth_up = -cumsum(AsubZ,2)+AsubZ+repmat(AsurfH,1,grid.nl);
 Depth_down = -cumsum(AsubZ,2)+repmat(AsurfH,1,grid.nl);
 Depth_up = Depth_up - min(Depth_down(:));
 Depth_down = Depth_down - min(Depth_down(:));
-z_int = min(Depth_down(:)):min(AsubZ(:,2:end),[],'all')/2:max(Depth_up(:));
+z_int = min(Depth_down(:)):min(AsubZ(:,2:end),[],'all')/5:max(Depth_up(:));
 z_int = repmat(z_int,length(tind),1);
 
 figure;
@@ -93,7 +93,7 @@ for v=1:length(vars)
             Asub_regrid(t,ind) = Asub(t,z);
         end
     end
-    zaxis = min(Depth_down(:)):min(AsubZ(:,2:end),[],'all')/2:max(Depth_up(:));
+    zaxis = min(Depth_down(:)):min(AsubZ(:,2:end),[],'all')/5:max(Depth_up(:));
     taxis = datenum(taxis_plot);
     
     s = subplot(length(vars),1,v);
