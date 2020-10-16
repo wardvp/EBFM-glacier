@@ -10,8 +10,8 @@ clearvars;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Time parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-time.ts = '01-May-2016 00:00';                                              % Date and time start run
-time.te = '01-Jul-2016 00:00';                                              % Date and time end run
+time.ts = '01-Sep-2015 00:00';                                              % Date and time start run
+time.te = '01-Sep-2016 00:00';                                              % Date and time end run
 time.dt = 0.125;                                                            % Timestep (days)
 time.tn = round((datenum(time.te)- ...                                      % Nr. of time-steps
     datenum(time.ts))/time.dt)+1;
