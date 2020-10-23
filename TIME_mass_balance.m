@@ -12,7 +12,7 @@ OUT.cmb_cumulative = OUT.cmb_cumulative + OUT.cmb;
 
 % Snow mass
 OUT.snowmass = max(OUT.snowmass + OUT.cmb,0);
-OUT.snowmass(all(OUT.subD==C.Dice,2),1) = 0;
+OUT.snowmass(all(OUT.subD>=C.Dice,2),1) = 0;
 
 end
 
