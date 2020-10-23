@@ -408,7 +408,6 @@ runoff_slush = avail_S - 1.0/(1.0+dt/C.Trunoff).*avail_S;                   % ru
 avail_S = 1.0/(1.0+dt/C.Trunoff).*avail_S;
 avail_S(avail_S<1d-25) = 0.0;
 OUT.subS = zeros(grid.gpsum,nl);
-slushspace = zeros(grid.gpsum,nl);
 for n=nl:-1:1
     cond1 = avail_S>slushspace(:,n);
     OUT.subS(cond1,n) = slushspace(cond1,n);
