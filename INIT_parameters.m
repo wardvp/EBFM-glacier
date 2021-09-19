@@ -27,7 +27,7 @@ grid.doubledepth = 1;                                                       % Do
 grid.split = [15;25;35];                                                    % Vertical layer nr's at which layer depth doubles
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Model physics
+%%% Model parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 phys.percolation = 'normal';                                                % Water percolation scheme:
                                                                             %   - 'bucket': tipping-bucket method (all water added at the surface)
@@ -42,7 +42,7 @@ phys.snow_compaction = 'firn_only';                                         % Sn
 %%% Input/output parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 io.homedir = pwd;                                                           % Home directory
-io.outdir = [io.homedir '/Output/'];                                        % Output directory
+io.outdir = [io.homedir '/Output/Testrun/'];                                 % Output directory
 io.rebootdir = [io.homedir '/Reboot/'];                                     % Restart file directory
 io.example_run = 1;                                                         % Run example case (no user input required)
 io.readbootfile = 0;                                                        % REBOOT: read initial conditions from file (1=yes, 0=no)
