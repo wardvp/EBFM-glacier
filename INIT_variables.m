@@ -4,7 +4,7 @@
 %%% manually
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [OUT,IN,OUTFILE] = INIT_initial_conditions(C,grid,io)
+function [OUT,IN,OUTFILE] = INIT_variables(C,grid,io)
 
 OUT = struct;                                                               % structure containing model output variables
 IN = struct;                                                                % structure containing model input variables
