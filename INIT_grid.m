@@ -1,14 +1,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% GRID:
 %%% Read surface heights and glacier mask from input file(s)
+%%% Calculate derived grid parameters (e.g. slope, aspect)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [grid] = INIT_grid(grid,io)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Read and process grid information
+%%% USER INPUT: Provide grid information:
+%%%         - input.x: 2-D array containing UTM easting coordinates (m)
+%%%         - input.y: 2-D array containing UTM northing coordinates (m)
+%%%         - input.z: 2-D array containing elevation (m)
+%%%         - input.mask: 2-D array containing mask (0 = no glacier, 
+%%%                       1 = glacier)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-input = INIT_grid_read_data(io);
+
+if io.example_run
+    load([io.homedir '\Grid\dem_and_mask.mat']);
+    input = grid_svalbard;
+else
+    % SPECIFY USER INPUT HERE!
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 grid.x_2D = input.x;
 grid.y_2D = input.y;
@@ -37,7 +51,7 @@ end
 grid.gpsum = sum(grid.mask_2D(:)==1);
 grid.mask = grid.mask_2D(grid.mask_2D(:)==1);
 
-[grid.lat_2D,grid.lon_2D] = utm2ll(grid.x_2D,grid.y_2D,grid.utmzone);
+[grid.lat_2D,grid.lon_2D] = INIT_grid_utm2ll(grid.x_2D,grid.y_2D,grid.utmzone);
 
 grid.x = grid.x_2D(grid.mask_2D(:)==1); 
 grid.y = grid.y_2D(grid.mask_2D(:)==1);
