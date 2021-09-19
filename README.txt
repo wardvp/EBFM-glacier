@@ -10,8 +10,8 @@ Here is a quick guide on how to get started with EBFM in MATLAB.
 
 Before running the model for one or several glaciers some preparations are needed. First of all, there are some modelling 
 choices to make. Additionally, in order to run, the model requires information about the grid and meteorological
- conditions, and it needs to know which output variables to store and whether or not to read/write a restart file. The
- steps below describe how to get started with a new application of the model. 
+conditions, and it needs to know which output variables to store and whether or not to read/write a restart file. The
+steps below describe how to get started with a new application of the model. 
 
 1) Modelling choices:
 The standard model physics and model parameter setup are described in Van Pelt et al. (2012, 2019, 2021) and references
@@ -101,6 +101,10 @@ subsurface evolution plot (Figures_subsurface.m). For more detailed instructions
 Marchenko, S., W.J.J. van Pelt, B. Claremar, H. Machguth, C.H. Reijmer, R. Pettersson and V.A. Pohjola (2017). 
 Parameterizing deep water percolation improves subsurface temperature simulations by a multilayer firn model. Frontiers 
 in Earth Science: Cryospheric Sciences, 5, 16. https://doi.org/10.3389/feart.2017.00016
+
+Van Kampenhout, L., J.T.M. Lenaerts, W.H. Lipscomb, W.J. Sacks, D.M. Lawrence, A.G. Slater and M.R. van den Broeke (2017).
+Improving the representation of polar snow and firn in the Community Earth System Model. Journal of Advances in Modeling 
+Earth Systems, 9, 2583– 2600. https://doi.org/10.1002/2017MS000988 
 
 Van Pelt, W.J.J., T.V. Schuler, V.A. Pohjola, and R. Pettersson (2021). Accelerating future mass loss of Svalbard 
 glaciers from a multi-model ensemble. Journal of Glaciology, 67(263), 485-499. https://doi.org/10.1017/jog.2021.2
