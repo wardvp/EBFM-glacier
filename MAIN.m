@@ -8,7 +8,7 @@
 [grid,time,io,phys]         = INIT_parameters();
 [C]                         = INIT_constants();
 [grid]                      = INIT_grid(grid,io);
-[OUT,IN,OUTFILE]            = INIT_initial_conditions(C,grid,io);
+[OUT,IN,OUTFILE]            = INIT_variables(C,grid,io);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Time-loop
