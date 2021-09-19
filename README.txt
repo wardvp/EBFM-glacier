@@ -17,7 +17,7 @@ steps below describe how to get started with a new application of the model.
 The standard model physics and model parameter setup are described in Van Pelt et al. (2012, 2019, 2021) and references
 therein. In INIT_parameters() choices can be made regarding the deep water percolation scheme (to use a 'bucket',
 'normal', 'linear' or 'uniform' scheme; see Marchenko et al. 2017 for more details) and the snow/firn compaction scheme
-(to use only firn physics 'firn-only' or to have a complementary seasonal snow model 'firn+snow'; see Kampenhout et al.
+(to use only firn physics 'firn-only' or to have a complementary seasonal snow model 'firn+snow'; see Van Kampenhout et al.
 2017 for more details). Note that Van Pelt et al. (2019, 2021) used a 'normal' percolation scheme and a 'firn-only' 
 compaction model.
 
